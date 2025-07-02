@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background: #f8f9fa;
+    }
+    .login-card {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .form-title {
+        font-weight: bold;
+        color: #0d6efd;
+    }
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #0d6efd;
+    }
+    .btn-outline-primary {
+        width: 100%;
+    }
+    .register-link {
+        text-align: center;
+        margin-top: 1rem;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="login-card">
+                <h3 class="form-title mb-4 text-center">🔐 Login to Your Account</h3>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% for fm in form %}
+                        <div class="mb-3">
+                            {{ fm.label_tag }}
+                            {{ fm }}
+                            {% if fm.errors %}
+                                <small class="text-danger">{{ fm.errors|striptags }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-outline-primary mt-2">Login</button>
+                </form>
+                <div class="register-link">
+                    <p>Don't have an account?</p>
+                    <a href="{% url 'register' %}" class="btn btn-outline-success">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

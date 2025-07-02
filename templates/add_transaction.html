@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .transaction-card {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    }
+    .form-title {
+        font-weight: bold;
+        color: #0d6efd;
+    }
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #0d6efd;
+    }
+    .btn-primary {
+        width: 100%;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="transaction-card">
+                <h3 class="form-title text-center mb-4">💸 Add New Transaction</h3>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                                <small class="text-danger">{{ field.errors|striptags }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary mt-2">
+                        <i class="fas fa-plus-circle"></i> Add Transaction
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

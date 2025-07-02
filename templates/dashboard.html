@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .card-summary {
+        border-radius: 15px;
+        padding: 1.5rem;
+        color: #fff;
+    }
+    .bg-balance { background: linear-gradient(45deg, #007bff, #00c6ff); }
+    .bg-income { background: linear-gradient(45deg, #28a745, #7bed9f); }
+    .bg-expense { background: linear-gradient(45deg, #dc3545, #ffa8a8); }
+    .table thead th {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">📊 Dashboard Overview</h2>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4 text-white">
+        <div class="col-md-4 mb-3">
+            <div class="card card-summary bg-balance">
+                <h5>💰 Balance</h5>
+                <h3>${{ balance }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card card-summary bg-income">
+                <h5>📈 Total Income</h5>
+                <h3>${{ income }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card card-summary bg-expense">
+                <h5>📉 Total Expense</h5>
+                <h3>${{ expense }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Transaction Button -->
+    <div class="text-end mb-4">
+        <a href="/add/" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Add Transaction</a>
+    </div>
+
+    <!-- Monthly Summary -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h4 class="mb-3">📆 Monthly Summary</h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Month</th>
+                            <th>Income</th>
+                            <th>Expense</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for month, data in monthly_summary.items %}
+                        <tr>
+                            <td>{{ month }}</td>
+                            <td class="text-success">${{ data.income }}</td>
+                            <td class="text-danger">${{ data.expense }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Transactions -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="mb-3">🧾 All Transactions</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for txn in transactions %}
+                        <tr>
+                            <td>{{ txn.title }}</td>
+                            <td>${{ txn.amount }}</td>
+                            <td>
+                                {% if txn.type == 'Income' %}
+                                    <span class="badge bg-success">{{ txn.type }}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">{{ txn.type }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ txn.category }}</td>
+                            <td>{{ txn.date }}</td>
+                            <td>
+                                <a href="/delete/{{ txn.id }}/" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this transaction?');">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
